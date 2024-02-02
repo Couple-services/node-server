@@ -1,0 +1,17 @@
+# API keys and secrets
+.env
+
+# Dependency directory
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Misc
+.DS_Store
+
+# Transpiled files
+build/
