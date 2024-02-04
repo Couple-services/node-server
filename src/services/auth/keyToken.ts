@@ -5,22 +5,27 @@ import { User } from 'utils/types';
 
 interface CreateKeyToken {
     userId: User['id'];
-    publicKey: crypto.KeyObject;
+    publicKey: string;
+    privateKey: string;
 }
 
 export const createKeyToken = async ({
     userId,
     publicKey,
-}: CreateKeyToken): Promise<string | null> => {
+    privateKey,
+}: CreateKeyToken): Promise<Record<string, string> | null> => {
     try {
-        const publicKeyString = String(
-            publicKey.export({ type: 'spki', format: 'pem' }),
-        );
         const token = await TokenModel.create({
             user: userId,
-            publicKey: publicKeyString,
+            publicKey,
+            privateKey,
         });
-        return token ? publicKeyString : null;
+        return token
+            ? {
+                  publicKey,
+                  privateKey,
+              }
+            : null;
     } catch (error) {
         logger.error(
             'Error in src/services/auth/keyToken.ts: createKeyToken function',

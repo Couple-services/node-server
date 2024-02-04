@@ -19,27 +19,20 @@ export const createTokenPair = ({
     privateKey,
     payload,
 }: CreateTokenPairDependencies): TokenPair => {
-    const accessToken = jwt.sign(payload, privateKey, {
-        algorithm: 'RS256',
+    const accessToken = jwt.sign(payload, publicKey, {
         expiresIn: process.env.JWT_EXPIRE,
     });
     const refreshToken = jwt.sign(payload, privateKey, {
-        algorithm: 'RS256',
         expiresIn: process.env.JWT_REFRESH_EXPIRE,
     });
     // verify token
-    jwt.verify(
-        accessToken,
-        publicKey,
-        { algorithms: ['RS256'] },
-        (err, decoded) => {
-            if (err) {
-                logger.error('Error while verifying access token', err);
-                throw new Error('Error while verifying access token');
-            } else {
-                logger.info('Access token is verified', decoded);
-            }
-        },
-    );
+    jwt.verify(accessToken, publicKey, (err, decoded) => {
+        if (err) {
+            logger.error('Error while verifying access token', err);
+            throw new Error('Error while verifying access token');
+        } else {
+            logger.info('Access token is verified', decoded);
+        }
+    });
     return { accessToken, refreshToken };
 };

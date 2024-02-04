@@ -26,24 +26,23 @@ export const signUpService = async (
         await user.save();
 
         // create public key and private key
-        const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-            modulusLength: 4096,
-        });
-        const publicKeyString = await createKeyToken({
+        const publicKey = crypto.randomBytes(64).toString('hex');
+        const privateKey = crypto.randomBytes(64).toString('hex');
+        const keys = await createKeyToken({
             userId: String(user._id),
             publicKey,
+            privateKey,
         });
-        if (!publicKeyString) {
+        if (!keys) {
             return {
                 code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
-                message: 'Error while creating public key',
+                message: 'Error while creating key token',
             };
         }
+
         const { accessToken, refreshToken } = createTokenPair({
-            publicKey: publicKeyString,
-            privateKey: String(
-                privateKey.export({ type: 'pkcs8', format: 'pem' }),
-            ),
+            publicKey,
+            privateKey,
             payload: {
                 id: String(user._id),
                 email,
