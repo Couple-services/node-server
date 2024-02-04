@@ -1,31 +1,31 @@
 {
-  "compilerOptions": {
-    "target": "es2021",
-    "lib": ["es2021"],
-    "baseUrl": "src",
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": false,
-    "noUncheckedIndexedAccess": true,
-    "noEmit": false,
-    "outDir": "build/",
-  },
-  "include": ["src"],
-  "ts-node": {
-    // https://typestrong.org/ts-node/docs/configuration/#via-tsconfigjson-recommended
-    // Equivalent to setting both `transpileOnly: true` and `transpiler: 'ts-node/transpilers/swc'`
-    "swc": true,
+    "compilerOptions": {
+        "target": "es2021",
+        "lib": ["es2021"],
+        "baseUrl": "src",
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": false,
+        "noUncheckedIndexedAccess": true,
+        "noEmit": false,
+        "outDir": "build/",
+    },
+    "include": ["src"],
+    "ts-node": {
+        // https://typestrong.org/ts-node/docs/configuration/#via-tsconfigjson-recommended
+        // Equivalent to setting both `transpileOnly: true` and `transpiler: 'ts-node/transpilers/swc'`
+        "swc": true,
 
-    // https://typestrong.org/ts-node/docs/paths/
-    // tsconfig-paths removes the need for NODE_PATH=./src and allows for
-    // fancier paths: https://medium.com/@fmoessle/typescript-paths-with-ts-node-ts-node-dev-and-jest-671deacf6428
-    "require": ["tsconfig-paths/register", "dotenv/config"],
-  },
+        // https://typestrong.org/ts-node/docs/paths/
+        // tsconfig-paths removes the need for NODE_PATH=./src and allows for
+        // fancier paths: https://medium.com/@fmoessle/typescript-paths-with-ts-node-ts-node-dev-and-jest-671deacf6428
+        "require": ["tsconfig-paths/register", "dotenv/config"],
+    },
 }

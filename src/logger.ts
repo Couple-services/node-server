@@ -1,4 +1,4 @@
-import { DEVELOPMENT } from 'consts';
+import { DEVELOPMENT } from 'utils/consts';
 import winston, { Logger } from 'winston';
 
 /**
@@ -17,23 +17,23 @@ import winston, { Logger } from 'winston';
  * @see https://github.com/winstonjs/winston#creating-your-own-logger
  */
 export function createLogger(level: string): Logger {
-  const format = DEVELOPMENT
-    ? winston.format.combine(
-        winston.format.colorize(),
-        winston.format.align(),
-        winston.format.simple(),
-      )
-    : winston.format.json();
+    const format = DEVELOPMENT
+        ? winston.format.combine(
+              winston.format.colorize(),
+              winston.format.align(),
+              winston.format.simple(),
+          )
+        : winston.format.json();
 
-  return winston.createLogger({
-    levels: winston.config.syslog.levels,
-    level,
-    transports: [
-      new winston.transports.Console({
-        format,
-      }),
-    ],
-  });
+    return winston.createLogger({
+        levels: winston.config.syslog.levels,
+        level,
+        transports: [
+            new winston.transports.Console({
+                format,
+            }),
+        ],
+    });
 }
 
 const logger = createLogger(process.env.MAX_LOG_LEVEL ?? 'notice');

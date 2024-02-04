@@ -1,11 +1,14 @@
 // implement auth routes
 import { ROUTES } from 'configs/routes';
-import { AuthController } from 'controllers/auth';
+import { signupController } from 'controllers/auth';
 import { Router } from 'express';
 
 const authRouter = Router();
 
-authRouter.get(ROUTES.auth.logIn, AuthController.login);
-authRouter.post(ROUTES.auth.signUp, AuthController.signup);
+authRouter.post(ROUTES.auth.signUp, signupController);
+authRouter.post(ROUTES.auth.logIn, (req, res) => {
+    console.log('login', req.body);
+    res.send('login');
+});
 
 export default authRouter;

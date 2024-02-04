@@ -1,36 +1,31 @@
 import { Schema, model } from 'mongoose';
+import { USER_DOCUMENT_NAME } from './user';
 
-const DOCUMENT_NAME = 'Token';
+export const TOKEN_DOCUMENT_NAME = 'Token';
 const COLLECTION_NAME = 'Tokens';
 
 // Declare the Schema of the Mongo model
 const tokenSchema = new Schema(
-  {
-    token: {
-      type: String,
-      required: true,
+    {
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: USER_DOCUMENT_NAME,
+            required: true,
+        },
+        publicKey: {
+            type: String,
+            required: true,
+        },
+        refreshToken: {
+            type: Array,
+            default: [],
+        },
     },
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
+    {
+        timestamps: true,
+        collection: COLLECTION_NAME,
     },
-    type: {
-      type: String,
-      enum: ['access', 'refresh'],
-      required: true,
-    },
-    expires: {
-      type: Date,
-      required: true,
-    },
-    blacklisted: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  {
-    timestamps: true,
-    collection: COLLECTION_NAME,
-  },
 );
+
+//Export the model
+export default model(TOKEN_DOCUMENT_NAME, tokenSchema);
