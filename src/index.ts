@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 Database.connect();
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('Welcome to node server');
+    res.send('Welcome to couple api');
 });
 
 //Routes
@@ -44,8 +44,7 @@ app.use(ROUTES.version1, AppRouter);
 // Error handler
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-    const error = new NotFoundError('Not Found');
-    next(error);
+    next(new NotFoundError());
 });
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {

@@ -15,7 +15,10 @@ class Database {
     private static instance: Database;
 
     constructor() {
-        this.connect();
+        if (Database.instance) {
+            return Database.instance;
+        }
+        Database.instance = this;
     }
 
     public async connect(type: DatabaseType = DatabaseType.MONGO) {
@@ -38,6 +41,7 @@ class Database {
         if (!Database.instance) {
             Database.instance = new Database();
         }
+
         return Database.instance;
     }
 }
