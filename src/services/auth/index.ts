@@ -1,22 +1,20 @@
 import bcrypt from 'bcrypt';
-import crypto from 'crypto';
+import { BadRequestError, ConflictError, UnauthorizedError } from 'core/errors';
 import { STATUS_CODE } from 'core/statusCode';
 import logger from 'logger';
 import UserSchema from 'models/auth/user';
-import { createTokenPair } from 'utils/auth';
+import { findUserByEmail } from 'services/functions';
 import { SALT_ROUNDS } from 'utils/consts';
-import { RequestResult, User, UserSignupData } from 'utils/types';
-import { createKeyToken } from './keyToken';
-import { ConflictError, InternalServerError } from 'core/errors';
+import {
+    RequestResult,
+    User,
+    UserLoginData,
+    UserSignupData,
+} from 'utils/types';
 
 export const signUpService = async (
     data: UserSignupData,
-): Promise<
-    RequestResult<{
-        refreshToken: string;
-        accessToken: string;
-    }>
-> => {
+): Promise<RequestResult<User>> => {
     try {
         const { name, email, password } = data;
         // check if user exists
@@ -30,36 +28,42 @@ export const signUpService = async (
         const user = new UserSchema({ email, password: hashedPassword, name });
         await user.save();
 
-        // create public key and private key
-        const publicKey = crypto.randomBytes(64).toString('hex');
-        const privateKey = crypto.randomBytes(64).toString('hex');
-        const keys = await createKeyToken({
-            userId: String(user._id),
-            publicKey,
-            privateKey,
-        });
-        if (!keys) {
-            throw new InternalServerError('Error while creating token keys');
-        }
-
-        const { accessToken, refreshToken } = createTokenPair({
-            publicKey,
-            privateKey,
-            payload: {
-                id: String(user._id),
-                email,
-                name,
-            },
-        });
-
         return {
             statusCode: STATUS_CODE.CREATED,
             message: 'User created',
             metadata: {
-                accessToken,
-                refreshToken,
+                ...user,
+                id: String(user._id),
             },
         };
+    } catch (error) {
+        logger.error(
+            'Error in src/services/auth/index.ts: login function',
+            error,
+        );
+        throw error;
+    }
+};
+
+export const loginService = async (
+    data: UserLoginData,
+): Promise<
+    RequestResult<{
+        refreshToken: string;
+        accessToken: string;
+    }>
+> => {
+    try {
+        const { email, password, refreshToken } = data;
+        // check email in db
+        const user = await findUserByEmail(email);
+        if (!user) {
+            throw new BadRequestError('User not registered');
+        }
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+            throw new UnauthorizedError('Wrong password');
+        }
     } catch (error) {
         logger.error(
             'Error in src/services/auth/index.ts: login function',

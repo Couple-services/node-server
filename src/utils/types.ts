@@ -11,7 +11,11 @@ export interface UserSignupData {
     email: string;
     password: string;
 }
-
+export interface UserLoginData {
+    email: string;
+    password: string;
+    refreshToken: string | null;
+}
 // result of request
 export interface RequestResult<T> {
     statusCode: STATUS_CODE_TYPE;

@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { STATUS_CODE, STATUS_CODE_TYPE } from './statusCode';
 import { STATUS_REASON, STATUS_REASON_TYPE } from './statusReason';
 
-class SuccessResponse {
+export class SuccessResponse {
     constructor(
         public statusCode: STATUS_CODE_TYPE,
         public message: STATUS_REASON_TYPE,
