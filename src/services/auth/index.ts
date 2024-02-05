@@ -1,17 +1,22 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
-import { ConflictError, InternalServerError } from 'errors';
-import { STATUS_CODE } from 'errors/statusCode';
+import { STATUS_CODE } from 'core/statusCode';
 import logger from 'logger';
 import UserSchema from 'models/auth/user';
 import { createTokenPair } from 'utils/auth';
 import { SALT_ROUNDS } from 'utils/consts';
-import { RequestResult, UserSignupData } from 'utils/types';
+import { RequestResult, User, UserSignupData } from 'utils/types';
 import { createKeyToken } from './keyToken';
+import { ConflictError, InternalServerError } from 'core/errors';
 
 export const signUpService = async (
     data: UserSignupData,
-): Promise<RequestResult> => {
+): Promise<
+    RequestResult<{
+        refreshToken: string;
+        accessToken: string;
+    }>
+> => {
     try {
         const { name, email, password } = data;
         // check if user exists
@@ -48,7 +53,7 @@ export const signUpService = async (
         });
 
         return {
-            code: STATUS_CODE.CREATED,
+            statusCode: STATUS_CODE.CREATED,
             message: 'User created',
             metadata: {
                 accessToken,

@@ -1,5 +1,5 @@
+import { InternalServerError } from 'core/errors';
 import crypto from 'crypto';
-import { InternalServerError } from 'errors';
 import logger from 'logger';
 import TokenModel from 'models/auth/token';
 import { User } from 'utils/types';

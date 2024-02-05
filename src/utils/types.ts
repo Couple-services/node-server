@@ -1,4 +1,4 @@
-import { STATUS_CODE_TYPE } from 'errors/statusCode';
+import { STATUS_CODE_TYPE } from 'core/statusCode';
 
 export interface UserLoginData {
     email: string;
@@ -13,10 +13,10 @@ export interface UserSignupData {
 }
 
 // result of request
-export interface RequestResult {
-    code: STATUS_CODE_TYPE;
+export interface RequestResult<T> {
+    statusCode: STATUS_CODE_TYPE;
     message: string;
-    metadata?: any;
+    metadata?: T;
 }
 
 // User

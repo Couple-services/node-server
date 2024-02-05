@@ -9,8 +9,9 @@ import { appConfig } from './configs/index';
 import AppRouter from './routes/index';
 import { ROUTES } from 'configs/routes';
 import { corsOptions } from 'configs/cors';
-import { NotFoundError } from 'errors';
-import { STATUS_CODE } from 'errors/statusCode';
+import { STATUS_CODE } from 'core/statusCode';
+import logger from 'logger';
+import { NotFoundError } from 'core/errors';
 
 //For env File
 dotenv.config();
@@ -58,5 +59,5 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is Fire at http://localhost:${PORT}`);
+    logger.info(`Server is Fire at http://localhost:${PORT}`);
 });
