@@ -1,4 +1,4 @@
-import { HTTP_STATUS_TYPE } from './consts';
+import { STATUS_CODE_TYPE } from 'errors/statusCode';
 
 export interface UserLoginData {
     email: string;
@@ -14,7 +14,7 @@ export interface UserSignupData {
 
 // result of request
 export interface RequestResult {
-    code: HTTP_STATUS_TYPE;
+    code: STATUS_CODE_TYPE;
     message: string;
     metadata?: any;
 }

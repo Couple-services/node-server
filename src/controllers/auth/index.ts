@@ -9,5 +9,5 @@ import { UserSignupData } from 'utils/types';
 export const signupController = async (req: Request, res: Response) => {
     const userData: UserSignupData = req.body;
     const result = await signUpService(userData);
-    return res.status(result.code).json(result);
+    return res.status(result.code).json(await signUpService(userData));
 };

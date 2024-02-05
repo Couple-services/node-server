@@ -1,11 +1,13 @@
-import logger from 'logger';
-import { RequestResult, UserLoginData, UserSignupData } from 'utils/types';
-import UserSchema from 'models/auth/user';
-import { HTTP_STATUS, SALT_ROUNDS } from 'utils/consts';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
-import { createKeyToken } from './keyToken';
+import { ConflictError, InternalServerError } from 'errors';
+import { STATUS_CODE } from 'errors/statusCode';
+import logger from 'logger';
+import UserSchema from 'models/auth/user';
 import { createTokenPair } from 'utils/auth';
+import { SALT_ROUNDS } from 'utils/consts';
+import { RequestResult, UserSignupData } from 'utils/types';
+import { createKeyToken } from './keyToken';
 
 export const signUpService = async (
     data: UserSignupData,
@@ -13,12 +15,10 @@ export const signUpService = async (
     try {
         const { name, email, password } = data;
         // check if user exists
+
         const userExists = await UserSchema.findOne({ email }).lean();
         if (userExists) {
-            return {
-                code: HTTP_STATUS.CONFLICT,
-                message: 'User already exists',
-            };
+            throw new ConflictError('User already exists');
         }
         // create user
         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
@@ -34,10 +34,7 @@ export const signUpService = async (
             privateKey,
         });
         if (!keys) {
-            return {
-                code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
-                message: 'Error while creating key token',
-            };
+            throw new InternalServerError('Error while creating token keys');
         }
 
         const { accessToken, refreshToken } = createTokenPair({
@@ -51,7 +48,7 @@ export const signUpService = async (
         });
 
         return {
-            code: HTTP_STATUS.CREATED,
+            code: STATUS_CODE.CREATED,
             message: 'User created',
             metadata: {
                 accessToken,
@@ -63,9 +60,6 @@ export const signUpService = async (
             'Error in src/services/auth/index.ts: login function',
             error,
         );
-        return {
-            code: HTTP_STATUS.INTERNAL_SERVER_ERROR,
-            message: 'Error while creating user',
-        };
+        throw error;
     }
 };

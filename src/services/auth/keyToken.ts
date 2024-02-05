@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { InternalServerError } from 'errors';
 import logger from 'logger';
 import TokenModel from 'models/auth/token';
 import { User } from 'utils/types';
@@ -31,6 +32,6 @@ export const createKeyToken = async ({
             'Error in src/services/auth/keyToken.ts: createKeyToken function',
             error,
         );
-        throw error;
+        throw new InternalServerError('Error while creating token keys');
     }
 };
