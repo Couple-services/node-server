@@ -11,10 +11,10 @@ import { handleError } from 'middlewares/functions';
 const authRouter = Router();
 
 authRouter.post(
-    ROUTES.auth.signUp,
+    ROUTES.auth.signup,
     checkDuplicateUsernameOrEmail,
     handleError(signupController),
 );
-authRouter.post(ROUTES.auth.logIn, handleError(singinController));
+authRouter.post(ROUTES.auth.signin, handleError(singinController));
 
 export default authRouter;
