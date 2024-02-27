@@ -5,4 +5,8 @@ export const ROUTES = {
         logIn: '/login',
         signUp: '/signup',
     },
+    users: {
+        index: '/users',
+        getUser: '/:id',
+    },
 };
