@@ -7,6 +7,7 @@ export const ROUTES = {
     },
     users: {
         index: '/users',
+        getAll: '/',
         getUser: '/:id',
     },
 };

@@ -8,7 +8,7 @@ import { handleError } from 'middlewares/functions';
 const userRouter = Router();
 
 userRouter.get(
-    ROUTES.users.index,
+    ROUTES.users.getAll,
     verifyToken,
     handleError(getAllUsersController),
 );
