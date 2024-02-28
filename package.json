@@ -5,7 +5,6 @@
     "main": "src/index.ts",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "nodemon",
         "start": "node build/src/index.js",
         "clean": "rimraf coverage build tmp",
         "prebuild": "npm run lint",
@@ -14,7 +13,9 @@
         "build:release": "npm run clean && tsc -p tsconfig.release.json",
         "lint": "eslint . --ext .ts --ext .mts",
         "prettier": "prettier --config .prettierrc --write .",
-        "prepare": "husky"
+        "prepare": "husky",
+        "dev:ts": "tsc --watch",
+        "dev": "concurrently \"npm run dev:ts\" \"nodemon\""
     },
     "keywords": [],
     "author": "duyhiep2519",
@@ -43,6 +44,7 @@
         "@types/morgan": "^1.9.9",
         "@typescript-eslint/eslint-plugin": "^6.20.0",
         "@typescript-eslint/parser": "^6.20.0",
+        "concurrently": "^8.2.2",
         "eslint": "^8.56.0",
         "eslint-config-prettier": "^9.1.0",
         "husky": "^9.0.11",
