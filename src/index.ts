@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 // connect to database
 Database.connect();
 
-app.get('/', (req: Request, res: Response) => {
+app.get(`${ROUTES.version1}`, (req: Request, res: Response) => {
     res.send('Welcome to couple api');
 });
 
@@ -59,5 +59,5 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(PORT, () => {
-    logger.info(`Server is Fire at http://localhost:${PORT}`);
+    logger.info(`Server is Fire at http://localhost:${PORT}${ROUTES.version1}`);
 });
