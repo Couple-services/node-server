@@ -7,7 +7,8 @@ export const ROUTES = {
     },
     users: {
         index: '/users',
-        getAll: '/',
+        getAll: '/all',
         getUser: '/:id',
+        me: '/me',
     },
 };

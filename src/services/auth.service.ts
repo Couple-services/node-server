@@ -49,7 +49,7 @@ export const singinService = async (req: Request, res: Response) => {
     }
     const user = await User.findOne({ email }).exec();
     if (!user) {
-        throw new NotFoundError('User Not found!');
+        throw new NotFoundError('Email not registered!');
     }
     const passwordIsValid = bcrypt.compareSync(password, user.password);
     if (!passwordIsValid) {

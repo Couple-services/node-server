@@ -4,6 +4,7 @@ import { STATUS_CODE } from 'core/statusCode';
 import logger from 'logger';
 import { findUserBy } from './functions';
 import { NotFoundError } from 'core/errors';
+import mongoose from 'mongoose';
 
 export const getAllUsersService = async (req: Request, res: Response) => {
     try {
@@ -24,6 +25,20 @@ export const getUserByIdService = async (req: Request, res: Response) => {
         return res.status(STATUS_CODE.OK).json(user);
     } catch (err) {
         logger.error('Error in getUserById', err);
+        throw err;
+    }
+};
+
+// currentUserService
+export const getCurrentUserService = async (req: Request, res: Response) => {
+    try {
+        const user = await findUserBy({ _id: req['headers'].userId });
+        if (!user) {
+            throw new NotFoundError('User Not found!');
+        }
+        return res.status(STATUS_CODE.OK).json(user);
+    } catch (err) {
+        logger.error('Error in currentUserService', err);
         throw err;
     }
 };

@@ -2,6 +2,7 @@ import { STATUS_CODE } from 'core/statusCode';
 import { STATUS_REASON } from 'core/statusReason';
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload, TokenExpiredError, VerifyErrors } from 'jsonwebtoken';
+import logger from 'logger';
 import { User } from 'models/user.model';
 import { JWT_SECRET } from 'utils/consts';
 
@@ -36,7 +37,9 @@ export const verifyToken = (
     res: Response,
     next: NextFunction,
 ) => {
-    let token = req.headers.authorization;
+    // get bearer token from header
+    const token = req.headers['authorization']?.split(' ')[1];
+
     if (!token) {
         return res
             .status(STATUS_CODE.FORBIDDEN)
@@ -44,14 +47,18 @@ export const verifyToken = (
     }
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
+            logger.error('Error in verifyToken', err);
             return catchErrors(err, res);
         }
+
         if (!decoded) {
             return res
                 .status(STATUS_CODE.FORBIDDEN)
                 .json({ message: STATUS_REASON.FORBIDDEN });
         }
+
         req['headers']['userId'] = (decoded as JwtPayload)?.userId;
+
         next();
     });
 };
