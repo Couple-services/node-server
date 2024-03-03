@@ -45,6 +45,7 @@ export const verifyToken = (
             .status(STATUS_CODE.FORBIDDEN)
             .json({ message: `${STATUS_REASON.FORBIDDEN}! No token provided` });
     }
+
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
             logger.error('Error in verifyToken', err);
